@@ -3,16 +3,17 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/LoginPage';
 import AdminPanel from './components/AdminPage';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  // Check if user is logged in based on documentation lab assumptions [cite: 5, 6]
+  // 1. Logic: Check if user is logged in
   const isAuthenticated = !!localStorage.getItem('userId');
 
-export default function App() {
+  // 2. Return: The JSX for the component
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public Route */}
         <Route path="/login" element={<Login />} />
         
         {/* Protected Admin Route */}
@@ -23,6 +24,9 @@ export default function App() {
 
         {/* Default Redirect */}
         <Route path="/" element={<Navigate to="/login" />} />
+        
+        {/* Catch-all: If user goes to /hero or others you haven't built yet */}
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
   );
