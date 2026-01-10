@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, ArrowRight, Mail, Lock } from 'lucide-react';
+import UserProfile from '../pages/UserProfile';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');

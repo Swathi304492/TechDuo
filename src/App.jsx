@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/LoginPage';
 import AdminPanel from './components/AdminPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   // 1. Logic: Check if user is logged in
@@ -13,19 +14,22 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Route */}
         <Route path="/login" element={<Login />} />
         
-        {/* Protected Admin Route */}
+        {/* Add the Profile Route here */}
+        <Route 
+          path="/profile" 
+          element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />} 
+        />
+
         <Route 
           path="/admin" 
           element={isAuthenticated ? <AdminPanel /> : <Navigate to="/login" />} 
         />
 
-        {/* Default Redirect */}
         <Route path="/" element={<Navigate to="/login" />} />
         
-        {/* Catch-all: If user goes to /hero or others you haven't built yet */}
+        {/* This now only catches things that aren't login, admin, or profile */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
