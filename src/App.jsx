@@ -5,6 +5,7 @@ import Login from './components/LoginPage';
 import AdminPanel from './components/AdminPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserProfile from './pages/UserProfile';
+import HeroPage from './components/HeroPage';
 
 function App() {
   // 1. Logic: Check if user is logged in
@@ -16,7 +17,12 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         
-        {/* Add the Profile Route here */}
+        {/* NEW: Explicitly add the Hero Page Route */}
+        <Route 
+          path="/hero" 
+          element={isAuthenticated ? <HeroPage /> : <Navigate to="/login" />} 
+        />
+
         <Route 
           path="/profile" 
           element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />} 
@@ -27,9 +33,9 @@ function App() {
           element={isAuthenticated ? <AdminPanel /> : <Navigate to="/login" />} 
         />
 
-        <Route path="/" element={<Navigate to="/login" />} />
+        {/* Redirect root to /hero if logged in, else login */}
+        <Route path="/" element={isAuthenticated ? <Navigate to="/hero" /> : <Navigate to="/login" />} />
         
-        {/* This now only catches things that aren't login, admin, or profile */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
