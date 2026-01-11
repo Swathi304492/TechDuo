@@ -1,0 +1,119 @@
+/* ================= PAGE ================= */
+.profile-container {
+  display: flex;
+  gap: 28px;
+  padding: 24px;
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: linear-gradient(135deg, #c9e4de, #c6def1);
+  font-family: "Inter", system-ui, sans-serif;
+  color: #1e293b;
+}
+
+/* ================= LEFT PROFILE ================= */
+.profile-card {
+  width: 260px;
+  padding: 24px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  text-align: center;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.avatar {
+  font-size: 64px;
+  margin-bottom: 12px;
+}
+
+/* ================= RIGHT PANEL ================= */
+.stats-container {
+  flex: 1;
+  padding: 28px 32px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+  display: flex;
+  flex-direction: column;
+}
+
+.stats-container h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 28px;
+}
+
+/* ================= PROGRESS LIST ================= */
+.progress-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================= PROGRESS ITEM ================= */
+.progress-item {
+  padding: 22px 24px;
+  border-radius: 18px;
+  background: #f8fafc;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  margin-bottom: 36px;   /* 🔥 CLEAR SPACE BETWEEN BOXES */
+}
+
+/* Remove space after last item */
+.progress-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Header */
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.progress-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.progress-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* ================= NORMAL PROGRESS BAR ================= */
+.progress-bar {
+  height: 10px;
+  width: 100%;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0;
+  background: #4f46e5;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 900px) {
+  .profile-container {
+    flex-direction: column;
+    height: auto;
+    overflow: auto;
+  }
+
+  .profile-card {
+    width: 100%;
+  }
+}
