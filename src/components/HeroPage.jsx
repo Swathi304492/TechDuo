@@ -1,14 +1,11 @@
+
 import React, { useEffect, useRef } from "react";
- 
-/**
- * TechlingoPage
- * - Pastel Blue & Green theme
- * - Enlarged "Techlingo" brand
- * - Learning card (description-only) → opens learn.html in new tab
- * - Testing card (description-only) → Start opens test.html in new tab
- * - Leaderboard with fixed height and internal scroll (sticky header)
- */
+import { useNavigate } from "react-router-dom";
+import { User as UserIcon } from "lucide-react"; // optional; see fallback below
+
 export default function HeroPage() {
+  const navigate = useNavigate();
+
   // Demo leaderboard data
   const leaderboardData = useRef([
     { name: "Aarav", score: 92 },
@@ -22,8 +19,8 @@ export default function HeroPage() {
     { name: "Neha", score: 70 },
     { name: "Kabir", score: 68 },
   ]);
- 
-  // Render leaderboard rows into the table body
+
+  // Render leaderboard rows
   useEffect(() => {
     const tbody = document.getElementById("leaderboardBody");
     if (!tbody) return;
@@ -46,47 +43,42 @@ export default function HeroPage() {
           <td>#${rank}</td>
           <td>${row.name}</td>
           <td>${row.score}%</td>
-          <td>${rank <= 3 ? `<span class="badge ${badgeClass}">Top ${rank}</span>` : ""}</td>
+          <td>${rank <= 3 ? '<span class="badge ${badgeClass}">Top ' + rank + '</span>' : ""}</td>
         `;
         tbody.appendChild(tr);
       });
   }, []);
- 
-  const openTestInNewTab = () => {
-    window.open("test.html", "_blank", "noopener");
-  };
- 
-  // Learning opens in a new tab
-  const openLearningInNewTab = () => {
-    window.open("learn.html", "_blank", "noopener");
-  };
- 
+
+  // Navigation helpers
+  const openTestInNewTab = () => window.open("/test", "_blank", "noopener");
+  const openLearningInNewTab = () => window.open("/learn", "_blank", "noopener");
+  const goToGame = () => navigate("/game");        // same-tab
+  const goToProfile = () => navigate("/profile");  // same-tab
+
   return (
     <>
       {/* Inline styles to keep everything self-contained */}
       <style>{`
         :root{
-          /* Pastel Blue & Green theme */
-          --bg: #f0fbff;           /* very light pastel blue background */
-          --bg-soft: #e8f9f1;      /* very light pastel green wash */
-          --card: #e6f2ff;         /* card base pastel blue */
-          --accent: #9be7d9;       /* pastel teal-green for primary accents */
-          --accent-2: #a3c4f3;     /* pastel blue secondary accent */
-          --text: #0e2a36;         /* deep blue for contrast */
-          --muted: #50708a;        /* cool muted text */
-          --danger: #f59fb0;       /* soft rose for errors */
-          --success: #94e2c6;      /* minty green for success/progress */
-          --warning: #ffd6a5;      /* soft apricot for warnings */
- 
-          --chip: #eafaf5;         /* chip bg mint */
+          --bg: #f0fbff;
+          --bg-soft: #e8f9f1;
+          --card: #e6f2ff;
+          --accent: #9be7d9;
+          --accent-2: #a3c4f3;
+          --text: #0e2a36;
+          --muted: #50708a;
+          --danger: #f59fb0;
+          --success: #94e2c6;
+          --warning: #ffd6a5;
+          --chip: #eafaf5;
           --chip-border: #cdeee2;
-          --tag-bg: #edf4ff;       /* tag bg light blue */
+          --tag-bg: #edf4ff;
           --tag-border: #cfe1ff;
- 
           --shadow: 0 6px 18px rgba(20, 52, 76, .08);
           --radius:16px;
           --radius-sm:12px;
           --radius-xs:10px;
+          --border: #d9e9ff;
         }
         *{box-sizing:border-box}
         html,body,#root{height:100%}
@@ -99,24 +91,49 @@ export default function HeroPage() {
           color:var(--text);
         }
         a{color:var(--accent)}
- 
+
         /* Header (Hero) */
-        /* 🔽 Reduced top padding to remove extra space */
-        header.hero{ padding:4px 16px 8px; }
+        header.hero{ padding:4px 16px 8px; position: relative; }
         .hero__wrap{
           max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.25fr 1fr;gap:32px;align-items:center;
+          position: relative;
         }
+
+        /* 🔝 Top-right user icon button */
+        .hero__userbtn{
+          position:absolute;
+          top:10px;
+          right:16px;
+          z-index: 5;
+        }
+        .btn-icon{
+          appearance:none;
+          display:inline-flex;
+          align-items:center;
+          justify-content:center;
+          width:40px; height:40px;
+          border-radius:999px;
+          background:#fff;
+          color:var(--text);
+          border:1px solid var(--border);
+          box-shadow:var(--shadow);
+          cursor:pointer;
+          transition: box-shadow .2s ease, transform .06s ease, border-color .2s ease;
+        }
+        .btn-icon:hover{ border-color: var(--accent-2); box-shadow: 0 8px 24px rgba(20,52,76,.12); }
+        .btn-icon:active{ transform: scale(.98); }
+        .btn-icon:focus{
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(163,196,243,.30);
+        }
+
         .brandline{ display:flex;align-items:center;gap:10px;margin-bottom:10px;color:var(--muted) }
         .logo-dot{
           width:16px;height:16px;border-radius:50%;
           background:linear-gradient(135deg, var(--accent), var(--accent-2));
           box-shadow:0 0 0 3px rgba(155, 231, 217, .25);
         }
-        .appname {
-          font-weight: 800;
-          letter-spacing: .2px;
-          font-size: 2.5rem; /* Bigger Techlingo text */
-        }
+        .appname { font-weight: 800; letter-spacing: .2px; font-size: 2.5rem; }
         .hero__intro{font-size:16px;color:var(--muted);margin:0 0 8px}
         .hero__title{font-weight:800;font-size:42px;line-height:1.1;margin:0 0 12px}
         .hero__subtitle{font-size:18px;color:var(--muted);margin:0 0 24px}
@@ -135,7 +152,7 @@ export default function HeroPage() {
           border:1px solid var(--chip-border);
           padding:10px 12px;border-radius:999px;font-size:14px
         }
- 
+
         /* Main grid sections */
         main{padding:24px}
         .grid{
@@ -157,44 +174,10 @@ export default function HeroPage() {
         }
         .card__title{font-size:20px;font-weight:700;margin:0}
         .card__body{padding:18px}
-        .pill{
-          display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 12px;
-          background:#e7f7ff;color:#0f3753;border:1px solid #cbe8ff;font-size:13px
-        }
-        .list{list-style:none;margin:16px 0 0;padding:0}
-        .list li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed #cfe4f7}
-        .list li:last-child{border-bottom:0}
-        .tag{
-          font-size:12px;color:#1e4e79;background:var(--tag-bg);
-          border:1px solid var(--tag-border);border-radius:6px;padding:4px 8px
-        }
-        .progress{ height:8px;background:#e9f3fb;border-radius:999px;overflow:hidden;margin-top:12px }
-        .progress > span{ display:block;height:100%; background:linear-gradient(90deg,var(--success),var(--accent-2)); width:0% }
-        .input{
-          width:100%;padding:12px 14px;border-radius:12px;border:1px solid #cfe7f3;background:#ffffff;color:var(--text);
-          outline:none
-        }
-        .kbd{
-          font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,"Liberation Mono","Courier New",monospace;
-          background:#edfaff;border:1px solid #cfe7ff;border-radius:6px;padding:2px 6px;font-size:12px;color:#0f3753
-        }
-        .flex{display:flex;gap:10px;flex-wrap:wrap}
- 
-        /* Make entire card body clickable */
-        .card__link{
-          display:block;
-          text-decoration:none;
-          color:inherit;
-        }
+        .card__link{ display:block; text-decoration:none; color:inherit; }
         .card__link:hover{ background:rgba(255,255,255,0.2) }
-        .card-cta{
-          display:inline-block;
-          margin-top:8px;
-          font-size:0.9rem;
-          color:#2563eb;
-          font-weight:600;
-        }
- 
+        .card-cta{ display:inline-block; margin-top:8px; font-size:0.9rem; color:#2563eb; font-weight:600; }
+
         /* Leaderboard */
         .leaderboard{width:100%;border-collapse:collapse;margin-top:6px}
         .leaderboard th, .leaderboard td{
@@ -205,29 +188,35 @@ export default function HeroPage() {
         .badge--gold{background:#fff9db;color:#6a5200;border:1px solid #f3e38a}
         .badge--silver{background:#f1f3f5;color:#495057;border:1px solid #ced4da}
         .badge--bronze{background:#ffe9dd;color:#7a4a2b;border:1px solid #f0c3a3}
- 
+
         footer{max-width:1100px;margin:28px auto;padding:0 24px;color:var(--muted)}
-        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
- 
-        /* Scrollable leaderboard wrapper */
-        .table-scroll {
-          max-height: 240px;          /* adjust as you like */
-          overflow-y: auto;           /* enable vertical scroll */
-          overflow-x: hidden;         /* no horizontal scroll */
-          border-radius: 12px;        /* optional: match your theme */
-        }
-        /* Sticky header so column titles stay visible while scrolling */
-        .table-scroll thead th {
-          position: sticky;
-          top: 0;
-          background: #e9f6ff;        /* matches your pastel header row color */
-          z-index: 1;
-        }
+
+        .table-scroll { max-height: 240px; overflow-y: auto; overflow-x: hidden; border-radius: 12px; }
+        .table-scroll thead th { position: sticky; top: 0; background: #e9f6ff; z-index: 1; }
       `}</style>
- 
+
       {/* HERO */}
       <header className="hero" role="banner">
         <div className="hero__wrap">
+          {/* 👤 Top-right profile button */}
+          <div className="hero__userbtn">
+            <button
+              className="btn-icon"
+              aria-label="Open user profile"
+              title="Profile"
+              onClick={goToProfile}
+            >
+              {/* If using lucide-react: */}
+              <UserIcon size={20} />
+              {/* If not using lucide, replace with a simple SVG:
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="8" r="4" fill="currentColor" />
+                <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="currentColor" strokeWidth="2" />
+              </svg>
+              */}
+            </button>
+          </div>
+
           <div>
             <div className="brandline" aria-label="Brand line">
               <span className="logo-dot" aria-hidden="true"></span>
@@ -239,7 +228,7 @@ export default function HeroPage() {
               Learn, test, and climb the leaderboard with bite‑size lessons and gamified challenges.
             </p>
             <div className="hero__cta">
-              {/* 🔽 Label restored to "Start Learning" */}
+              {/* Start Learning → opens /learn in a new tab */}
               <button
                 className="btn btn--primary"
                 id="startLearningBtn"
@@ -248,11 +237,13 @@ export default function HeroPage() {
               >
                 Start Learning
               </button>
+
+              {/* Try a Quick Test → opens /test in a new tab */}
               <button
                 className="btn btn--ghost"
-                id="startTestBtn"
+                id="startQuickTestBtn"
                 onClick={openTestInNewTab}
-                aria-label="Start Testing"
+                aria-label="Try a Quick Test"
               >
                 Try a Quick Test
               </button>
@@ -263,7 +254,7 @@ export default function HeroPage() {
               <span className="statchip">⏱️ Session: ~5 min</span>
             </div>
           </div>
- 
+
           <div aria-hidden="true">
             {/* Decorative panel */}
             <div className="card" style={{ borderRadius: 28 }}>
@@ -272,19 +263,21 @@ export default function HeroPage() {
                 <h3 className="card__title" style={{ margin: 0 }}>Flashcards Preview</h3>
               </div>
               <div className="card__body">
-                <div className="pill">Term: <span className="kbd">API</span> • Difficulty: <strong>Easy</strong></div>
+                <div className="pill">
+                  Term: <span className="kbd">API</span> • Difficulty: <strong>Easy</strong>
+                </div>
                 <p style={{ marginTop: 12, color: "#2b597a" }}>
                   A set of rules and definitions that let apps talk to each other.
                 </p>
                 <div className="progress" aria-label="Learning progress">
-                  <span style={{ width: "42%" }}></span>
+                  <span style={{ display: "block", height: "8px", background: "linear-gradient(90deg,#94e2c6,#a3c4f3)", width: "42%" }} />
                 </div>
               </div>
             </div>
           </div>
         </div>
       </header>
- 
+
       {/* MAIN SECTIONS */}
       <main>
         <div className="grid" id="sectionsGrid">
@@ -294,10 +287,10 @@ export default function HeroPage() {
               <div className="card__icon" aria-hidden="true">📚</div>
               <h2 className="card__title" id="learningTitle">Learning</h2>
             </div>
- 
-            {/* Entire body is a link that opens in a new tab */}
+
+            {/* Entire body is a link that opens /learn in a new tab */}
             <a
-              href="learn.html"
+              href="/learn"
               target="_blank"
               rel="noopener noreferrer"
               className="card__body card__link"
@@ -308,12 +301,11 @@ export default function HeroPage() {
                 Click to start the <strong>Fundamentals</strong> track—no distractions, just the
                 definition and an example to help you remember faster.
               </p>
-              {/* 🔽 CTA text changed for consistency */}
               <span className="card-cta">Start Learning →</span>
             </a>
           </section>
- 
-          {/* Testing Section (description-only, opens test.html in new tab) */}
+
+          {/* Testing Section */}
           <section className="card" aria-labelledby="testingTitle">
             <div className="card__header">
               <div className="card__icon" aria-hidden="true">🧪</div>
@@ -325,23 +317,24 @@ export default function HeroPage() {
                 (e.g., API, JWT, Docker). Your <strong>session score</strong> updates after every attempt, and you can move to the
                 <strong> next question</strong> anytime.
               </p>
- 
+
               <div style={{ marginTop: 16, display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <button className="btn btn--primary" id="startTestBtn" onClick={openTestInNewTab} aria-label="Start Testing">
+                {/* ▶ Start → goes to GamingPage at /game (same tab) */}
+                <button
+                  className="btn btn--primary"
+                  id="startGameBtn"
+                  onClick={goToGame}
+                  aria-label="Start Gaming Section"
+                >
                   Start
                 </button>
-                <button
-                  className="btn btn--ghost"
-                  aria-label="Learn More"
-                  onClick={() => window.open("test.html#how-it-works", "_blank")}
-                >
-                  How it works
-                </button>
+
+                
               </div>
             </div>
           </section>
- 
-          {/* Leaderboard Section with scroll wrapper */}
+
+          {/* Leaderboard Section */}
           <section className="card" aria-labelledby="leaderboardTitle">
             <div className="card__header">
               <div className="card__icon" aria-hidden="true">🏁</div>
@@ -360,7 +353,7 @@ export default function HeroPage() {
           </section>
         </div>
       </main>
- 
+
       <footer>
         <small>Techlingo • Learn, test, and lead with pastel blue &amp; green.</small>
       </footer>
